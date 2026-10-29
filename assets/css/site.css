@@ -1,0 +1,31 @@
+/* Cartão Cuida Bem: estilos base do site (o restante do visual está nos atributos style de cada página) */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif; color: #2E2238; background: #FFFFFF; }
+a { color: #5F4573; }
+a:hover { color: #2E2238; }
+[hidden] { display: none !important; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid #EF7823; outline-offset: 2px;
+}
+input:focus, select:focus, textarea:focus { border-color: #5F4573 !important; outline: none; box-shadow: 0 0 0 3px #E4DEEA; }
+button { -webkit-tap-highlight-color: transparent; }
+.faq-btn[aria-expanded="true"] > span:last-child { transform: rotate(180deg); }
+[id] { scroll-margin-top: 96px; }
+
+/* Comparativo Plano de saúde x Cartão Cuida Bem (página Sobre) */
+.cmp-desk { display: grid; }
+.cmp-mob { display: none; }
+@media (max-width: 880px) {
+  .cmp-desk { display: none; }
+  .cmp-mob { display: flex; }
+}
+
+/* Celular: menu deixa de ser fixo para não ocupar a tela */
+@media (max-width: 767px) {
+  header { position: static !important; }
+  [id] { scroll-margin-top: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
