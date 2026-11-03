@@ -1,4 +1,4 @@
-# Site Cartão Cuida Bem (versão para validação)
+# Site Cartão Cuida Bem, Versão 2 (para validação)
 
 Site estático em HTML, CSS e JavaScript puro. Não precisa de build nem de servidor especial.
 

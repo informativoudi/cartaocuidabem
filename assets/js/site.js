@@ -25,7 +25,7 @@
     botoes.forEach(function (b) {
       var ativo = b.dataset.periodo ? b.dataset.periodo === estado.periodo : b.dataset.tipo === estado.tipo;
       b.setAttribute('aria-pressed', ativo ? 'true' : 'false');
-      b.style.background = ativo ? '#5F4573' : 'transparent';
+      b.style.background = ativo ? '#2E2238' : 'transparent';
       b.style.color = ativo ? '#FFFFFF' : '#2E2238';
     });
     var rotulo = (estado.periodo === 'anual' ? 'Assinatura anual' : 'Assinatura mensal') + ' ' + estado.tipo;
