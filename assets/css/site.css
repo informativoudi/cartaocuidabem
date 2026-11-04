@@ -6,6 +6,8 @@ body { margin: 0; font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', 
 a { color: #5F4573; }
 a:hover { color: #2E2238; }
 [hidden] { display: none !important; }
+header nav a { transition: background-color 0.15s; }
+header nav a:hover { background: #F1EDF5; }
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
   outline: 3px solid #EF7823; outline-offset: 2px;
 }
