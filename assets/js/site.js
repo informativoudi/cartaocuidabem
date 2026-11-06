@@ -2,13 +2,18 @@
 (function () {
   'use strict';
 
-  /* Dúvidas frequentes: abre e fecha cada pergunta */
-  document.querySelectorAll('.faq-btn').forEach(function (btn) {
+  /* Dúvidas frequentes: abre uma pergunta por vez (abrir outra fecha a anterior) */
+  var faqBtns = document.querySelectorAll('.faq-btn');
+  function definir(btn, abrir) {
     var resposta = btn.parentElement.querySelector('.faq-a');
+    btn.setAttribute('aria-expanded', abrir ? 'true' : 'false');
+    if (resposta) resposta.hidden = !abrir;
+  }
+  faqBtns.forEach(function (btn) {
     btn.addEventListener('click', function () {
-      var aberto = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', aberto ? 'false' : 'true');
-      if (resposta) resposta.hidden = aberto;
+      var abrir = btn.getAttribute('aria-expanded') !== 'true';
+      faqBtns.forEach(function (outro) { if (outro !== btn) definir(outro, false); });
+      definir(btn, abrir);
     });
   });
 
@@ -46,6 +51,48 @@
     });
   });
   if (botoes.length) atualizar();
+
+  /* Home: abas da seção de serviços (clique e setas do teclado) */
+  var svTabs = Array.prototype.slice.call(document.querySelectorAll('.sv-item[data-sv]'));
+  function svAtivar(tab, foco) {
+    svTabs.forEach(function (t) {
+      var ativo = t === tab;
+      t.setAttribute('aria-selected', ativo ? 'true' : 'false');
+      t.tabIndex = ativo ? 0 : -1;
+      var painel = document.getElementById('sv-painel-' + t.dataset.sv);
+      if (painel) painel.style.display = ativo ? 'block' : 'none';
+    });
+    if (foco) tab.focus();
+  }
+  svTabs.forEach(function (tab, i) {
+    tab.tabIndex = tab.getAttribute('aria-selected') === 'true' ? 0 : -1;
+    tab.addEventListener('click', function () {
+      svAtivar(tab, false);
+      /* no celular o painel fica abaixo da lista: leva o visitante até ele */
+      var painel = document.getElementById('sv-painel-' + tab.dataset.sv);
+      if (painel && window.innerWidth < 1040) {
+        var r = painel.getBoundingClientRect();
+        if (r.top > window.innerHeight * 0.6) painel.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+      }
+    });
+    /* no computador (mouse), troca ao passar o mouse, com uma pequena espera
+       para não trocar sem querer ao atravessar a lista; no celular, só no toque */
+    var espera = null;
+    tab.addEventListener('mouseenter', function () {
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      clearTimeout(espera);
+      espera = setTimeout(function () { svAtivar(tab, false); }, 120);
+    });
+    tab.addEventListener('mouseleave', function () { clearTimeout(espera); });
+    tab.addEventListener('keydown', function (e) {
+      var alvo = null;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') alvo = svTabs[(i + 1) % svTabs.length];
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') alvo = svTabs[(i - 1 + svTabs.length) % svTabs.length];
+      if (e.key === 'Home') alvo = svTabs[0];
+      if (e.key === 'End') alvo = svTabs[svTabs.length - 1];
+      if (alvo) { e.preventDefault(); svAtivar(alvo, true); }
+    });
+  });
 
   /* Contato: simula o envio (formulário ainda sem integração) */
   var form = document.getElementById('form-contato');
