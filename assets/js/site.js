@@ -2,6 +2,37 @@
 (function () {
   'use strict';
 
+  /* Cabeçalho: menu do celular (ícone de 3 traços / X) */
+  var menuBotao = document.querySelector('.menu-botao');
+  var menuPainel = document.getElementById('menu-principal');
+  if (menuBotao && menuPainel) {
+    var definirMenu = function (abrir) {
+      menuBotao.setAttribute('aria-expanded', abrir ? 'true' : 'false');
+      menuBotao.setAttribute('aria-label', abrir ? 'Fechar menu' : 'Abrir menu');
+    };
+    definirMenu(false);
+    menuBotao.addEventListener('click', function () {
+      definirMenu(menuBotao.getAttribute('aria-expanded') !== 'true');
+    });
+    menuPainel.addEventListener('click', function (e) {
+      if (e.target.closest('a')) definirMenu(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && menuBotao.getAttribute('aria-expanded') === 'true') { definirMenu(false); menuBotao.focus(); }
+    });
+    window.addEventListener('resize', function () { if (window.innerWidth > 1180) definirMenu(false); });
+  }
+
+  /* Cabeçalho: central de atendimento (passar o mouse no computador; tocar no celular) */
+  var telBotao = document.querySelector('.tel-topo__icone');
+  if (telBotao) {
+    var definirTel = function (abrir) { telBotao.setAttribute('aria-expanded', abrir ? 'true' : 'false'); };
+    definirTel(false);
+    telBotao.addEventListener('click', function () { definirTel(telBotao.getAttribute('aria-expanded') !== 'true'); });
+    document.addEventListener('click', function (e) { if (!e.target.closest('.tel-topo')) definirTel(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') definirTel(false); });
+  }
+
   /* Dúvidas frequentes: abre uma pergunta por vez (abrir outra fecha a anterior) */
   var faqBtns = document.querySelectorAll('.faq-btn');
   function definir(btn, abrir) {
@@ -23,7 +54,7 @@
     'Conecta':  { mensal: { individual: ['43,90', '526,80'], familiar: ['55,90', '670,80'] }, anual: { individual: ['39,51', '474,12'], familiar: ['50,31', '603,72'] } },
     'Conecta+': { mensal: { individual: ['72,90', '874,80'], familiar: ['99,90', '1.198,80'] }, anual: { individual: ['65,61', '787,32'], familiar: ['89,91', '1.078,92'] } }
   };
-  var estado = { periodo: 'mensal', tipo: 'individual' };
+  var estado = { periodo: 'anual', tipo: 'individual' };
   var botoes = document.querySelectorAll('[data-periodo], [data-tipo]');
 
   function atualizar() {
